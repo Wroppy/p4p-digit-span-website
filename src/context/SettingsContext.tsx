@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 
 export type DigitSpan = 5 | 9 | 13;
 
-interface SettingsContextValue {
+type SettingsContextValue = {
   digitSpan: DigitSpan;
   setDigitSpan: (span: DigitSpan) => void;
 }

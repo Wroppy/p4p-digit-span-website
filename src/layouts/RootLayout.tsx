@@ -1,6 +1,6 @@
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router";
-import AppHeader from "../components/AppHeader";
+import AppHeader from "../components/AppHeader/AppHeader";
 import { SettingsProvider } from "../context/SettingsContext";
 
 export default function RootLayout() {

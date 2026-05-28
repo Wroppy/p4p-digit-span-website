@@ -1,0 +1,29 @@
+.card {
+  width: 100%;
+  max-width: 860px;
+}
+
+.hint {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+}
+
+.sliderWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+}
+
+.sliderRow {
+  display: grid;
+  grid-template-columns: 4rem 1fr 4rem;
+  gap: var(--mantine-spacing-xs);
+  align-items: center;
+  flex: 1;
+}
+
+.anchor {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+  text-align: center;
+}
