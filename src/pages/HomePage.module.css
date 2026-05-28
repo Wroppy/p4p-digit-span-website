@@ -1,25 +1,46 @@
 .page {
   min-height: calc(100dvh - var(--app-shell-header-height));
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: var(--mantine-spacing-xl);
+  gap: calc(var(--mantine-spacing-xl) * 2);
 }
 
-.inner {
-  max-width: 520px;
+/* ── Hero ─────────────────────────────────────────── */
+.hero {
+  max-width: 560px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--mantine-spacing-lg);
+  gap: var(--mantine-spacing-md);
+}
+
+.eyebrow {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mantine-color-blue-6);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--mantine-color-dark-9);
+  margin: 0;
 }
 
 .description {
   color: var(--mantine-color-dimmed);
   font-size: var(--mantine-font-size-md);
-  line-height: 1.6;
+  line-height: 1.7;
+  max-width: 440px;
 }
 
 .spanInfo {
@@ -28,6 +49,7 @@
   gap: var(--mantine-spacing-xs);
   color: var(--mantine-color-dimmed);
   font-size: var(--mantine-font-size-sm);
+  margin-top: var(--mantine-spacing-xs);
 }
 
 .actions {
@@ -36,4 +58,49 @@
   align-items: center;
   gap: var(--mantine-spacing-sm);
   width: 100%;
+  margin-top: var(--mantine-spacing-sm);
+}
+
+/* ── Steps ────────────────────────────────────────── */
+.steps {
+  display: flex;
+  gap: var(--mantine-spacing-xl);
+  max-width: 640px;
+  width: 100%;
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--mantine-spacing-sm);
+}
+
+.stepNumber {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--mantine-color-blue-0);
+  border: 1.5px solid var(--mantine-color-blue-2);
+  color: var(--mantine-color-blue-6);
+  font-weight: 700;
+  font-size: var(--mantine-font-size-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepLabel {
+  font-weight: 600;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dark-7);
+}
+
+.stepDesc {
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+  line-height: 1.5;
 }
