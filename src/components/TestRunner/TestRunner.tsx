@@ -1,10 +1,11 @@
-import { Progress, Stack, Text, Title } from "@mantine/core";
+import { Progress, Stack, Text } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { useEffect } from "react";
 import { useSettings } from "../../context/SettingsContext";
 import dayjs from "../../lib/dayjs";
 import { type TestSession, createSession, type TrialRecord } from "../../lib/session";
 import DigitSpanTask, { type DigitSpanResult } from "../DigitSpanTask/DigitSpanTask";
+import TestResults from "../TestResults/TestResults";
 import TlxForm, { type TlxValues } from "../TlxForm/TlxForm";
 import styles from "./TestRunner.module.css";
 
@@ -51,15 +52,15 @@ export default function TestRunner() {
     );
   }
 
-  // Results phase (placeholder until chunk 5).
+  function handleRestart() {
+    setSession(createSession(trialsPerSpan));
+  }
+
+  // Results phase.
   if (session.completedAt) {
-    console.log("Test session complete:", session);
     return (
       <div className={styles.page}>
-        <Stack align="center" gap="md">
-          <Title order={2}>Test complete</Title>
-          <Text c="dimmed">Results and download coming next.</Text>
-        </Stack>
+        <TestResults session={session} onRestart={handleRestart} />
       </div>
     );
   }
