@@ -16,10 +16,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [digitSpan, setDigitSpan] = useLocalStorage<DigitSpan>({
     key: "digitSpan",
     defaultValue: 9,
+    getInitialValueInEffect: false,
   });
   const [trialsPerSpan, setTrialsPerSpan] = useLocalStorage<number>({
     key: "trialsPerSpan",
     defaultValue: 5,
+    getInitialValueInEffect: false,
   });
 
   return (
