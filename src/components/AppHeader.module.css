@@ -1,3 +1,8 @@
+.homeLink {
+  text-decoration: none;
+  color: inherit;
+}
+
 .inner {
   height: 100%;
   padding-left: var(--mantine-spacing-md);
