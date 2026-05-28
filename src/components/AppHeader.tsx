@@ -1,19 +1,16 @@
-import { Anchor, AppShell, Group, Title } from "@mantine/core";
+import { AppShell, Group, Title } from "@mantine/core";
 import { Link } from "react-router";
+import styles from "./AppHeader.module.css";
 
 export default function AppHeader() {
   return (
     <AppShell.Header>
-      <Group h="100%" px="md" justify="space-between">
-        <Title order={4}>Assessment</Title>
-        <Group gap="md">
-          <Anchor component={Link} to="/">
-            Home
-          </Anchor>
-          <Anchor component={Link} to="/settings">
-            Settings
-          </Anchor>
-        </Group>
+      <Group justify="space-between" className={styles.inner}>
+        <Title order={4}>Digit Span Assessment</Title>
+        <div className={styles.nav}>
+          <Link to="/" className={styles.navLink}>Home</Link>
+          <Link to="/settings" className={styles.navLink}>Settings</Link>
+        </div>
       </Group>
     </AppShell.Header>
   );

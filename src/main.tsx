@@ -7,7 +7,7 @@ import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <MantineProvider>
+    <MantineProvider forceColorScheme="light">
       <App />
     </MantineProvider>
   </BrowserRouter>
