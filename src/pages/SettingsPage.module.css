@@ -1,0 +1,12 @@
+.container {
+  padding-block: var(--mantine-spacing-xl);
+}
+
+.label {
+  font-weight: 500;
+}
+
+.hint {
+  font-size: var(--mantine-font-size-sm);
+  color: var(--mantine-color-dimmed);
+}
