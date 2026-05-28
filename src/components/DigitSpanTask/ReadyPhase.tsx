@@ -1,15 +1,18 @@
 import { Button, Stack, Text, Title } from "@mantine/core";
+import type { ReactNode } from "react";
 import styles from "./DigitSpanTask.module.css";
 
 type ReadyPhaseProps = {
   span: number;
   onStart: () => void;
+  progress?: ReactNode;
 };
 
-export default function ReadyPhase({ span, onStart }: ReadyPhaseProps) {
+export default function ReadyPhase({ span, onStart, progress }: ReadyPhaseProps) {
   return (
     <div className={styles.container}>
       <Stack align="center" gap="lg">
+        {progress}
         <Title order={2}>Digit Span Task</Title>
         <Text c="dimmed">
           You will see {span} digits, one at a time. When they are done, enter
