@@ -1,7 +1,8 @@
-import { Button, PinInput, Stack, Text, Title } from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import styles from "./DigitSpanTask.module.css";
+import PresentingPhase from "./PresentingPhase";
+import ReadyPhase from "./ReadyPhase";
+import RecallPhase from "./RecallPhase";
+import ResultPhase from "./ResultPhase";
 
 export type DigitSpanResult = {
   sequence: number[];
@@ -64,7 +65,8 @@ export default function DigitSpanTask({ span, onComplete }: DigitSpanTaskProps) 
 
   function handleSubmit(pin = pinValue) {
     const parsed = pin.split("").map(Number);
-    const isCorrect = parsed.every((d, i) => d === sequence[i]) && parsed.length === sequence.length;
+    const isCorrect =
+      parsed.length === sequence.length && parsed.every((d, i) => d === sequence[i]);
     setResponse(parsed);
     setCorrect(isCorrect);
     setPhase("result");
@@ -78,97 +80,8 @@ export default function DigitSpanTask({ span, onComplete }: DigitSpanTaskProps) 
     setCorrect(null);
   }
 
-  if (phase === "ready") {
-    return (
-      <div className={styles.container}>
-        <Stack align="center" gap="lg">
-          <Title order={2}>Digit Span Task</Title>
-          <Text c="dimmed">
-            You will see {span} digits, one at a time. When they are done,
-            enter them in the order you saw them.
-          </Text>
-          <Button size="lg" onClick={handleStart}>
-            Start
-          </Button>
-        </Stack>
-      </div>
-    );
-  }
-
-  if (phase === "presenting") {
-    return (
-      <div className={styles.container}>
-        {showing ? (
-          <div className={styles.digitDisplay}>{sequence[currentIndex]}</div>
-        ) : (
-          <div className={styles.blank} />
-        )}
-      </div>
-    );
-  }
-
-  if (phase === "recall") {
-    return (
-      <div className={styles.container}>
-        <Stack align="center" gap="lg">
-          <Title order={3}>Enter the digits you saw</Title>
-          <PinInput
-            length={span}
-            type="number"
-            size="xl"
-            autoFocus
-            value={pinValue}
-            onChange={setPinValue}
-            onComplete={handleSubmit}
-          />
-          <Button
-            size="lg"
-            onClick={() => handleSubmit()}
-            disabled={pinValue.length < span}
-          >
-            Submit
-          </Button>
-        </Stack>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.container}>
-      <Stack align="center" gap="lg">
-        <div className={styles.resultIcon}>
-          {correct ? (
-            <IconCheck size={72} color="var(--mantine-color-green-6)" />
-          ) : (
-            <IconX size={72} color="var(--mantine-color-red-6)" />
-          )}
-        </div>
-        <Title order={2}>{correct ? "Correct!" : "Incorrect"}</Title>
-        <Stack gap="xs" align="center">
-          <Text c="dimmed" size="sm">Correct sequence</Text>
-          <div className={styles.digitList}>
-            {sequence.map((digit, i) => (
-              <div key={i} className={styles.digitChip}>{digit}</div>
-            ))}
-          </div>
-          {!correct && (
-            <>
-              <Text c="dimmed" size="sm" mt="xs">Your response</Text>
-              <div className={styles.digitList}>
-                {response.map((digit, i) => (
-                  <div
-                    key={i}
-                    className={`${styles.digitChip} ${digit !== sequence[i] ? styles.digitChipWrong : ""}`}
-                  >
-                    {digit}
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </Stack>
-        <Button onClick={handleReset}>Try Again</Button>
-      </Stack>
-    </div>
-  );
+  if (phase === "ready") return <ReadyPhase span={span} onStart={handleStart} />;
+  if (phase === "presenting") return <PresentingPhase digit={sequence[currentIndex]} showing={showing} />;
+  if (phase === "recall") return <RecallPhase span={span} pinValue={pinValue} onChange={setPinValue} onSubmit={handleSubmit} />;
+  return <ResultPhase correct={correct!} sequence={sequence} response={response} onReset={handleReset} />;
 }
