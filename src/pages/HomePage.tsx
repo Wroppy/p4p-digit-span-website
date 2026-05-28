@@ -1,6 +1,8 @@
 import { Badge, Button, Text } from "@mantine/core";
-import { Link } from "react-router";
+import { useLocalStorage } from "@mantine/hooks";
+import { Link, useNavigate } from "react-router";
 import { useSettings } from "../context/SettingsContext";
+import { type TestSession, createSession } from "../lib/session";
 import styles from "./HomePage.module.css";
 
 const STEPS = [
@@ -14,12 +16,23 @@ const STEPS = [
   },
   {
     label: "Rate your workload",
-    desc: "Complete a short NASA TLX questionnaire after each trial.",
+    desc: "Complete a short NASA TLX questionnaire after the test.",
   },
 ];
 
 export default function HomePage() {
-  const { digitSpan } = useSettings();
+  const { digitSpan, trialsPerSpan } = useSettings();
+  const [session, setSession] = useLocalStorage<TestSession | null>({
+    key: "testSession",
+    defaultValue: null,
+    getInitialValueInEffect: false,
+  });
+  const navigate = useNavigate();
+
+  function startNewTest() {
+    setSession(createSession(trialsPerSpan));
+    navigate("/test");
+  }
 
   return (
     <div className={styles.page}>
@@ -28,20 +41,50 @@ export default function HomePage() {
         <h1 className={styles.title}>Digit Span Task</h1>
         <Text className={styles.description}>
           A short memory test measuring how many digits you can hold in working
-          memory. Each trial is followed by a workload rating.
+          memory. The test runs {trialsPerSpan} trials at each span, followed by
+          a workload rating.
         </Text>
-        <div className={styles.spanInfo}>
-          <Text size="sm" c="dimmed">Sequence length:</Text>
-          <Badge variant="light" size="md">{digitSpan} digits</Badge>
-        </div>
+
         <div className={styles.actions}>
-          <Button component={Link} to="/digit-span" size="lg" fullWidth>
-            Begin
+          {!session && (
+            <Button onClick={startNewTest} size="lg" fullWidth>
+              Start test
+            </Button>
+          )}
+          {session && !session.completedAt && (
+            <Button component={Link} to="/test" size="lg" fullWidth>
+              Continue test — trial {session.currentTrialIndex + 1} of{" "}
+              {session.plannedSpans.length}
+            </Button>
+          )}
+          {session && session.completedAt && (
+            <Button component={Link} to="/test" size="lg" fullWidth>
+              View results
+            </Button>
+          )}
+
+          <Button component={Link} to="/practice" variant="light" size="md" fullWidth>
+            Practice ({digitSpan} digits)
           </Button>
+
+          {session && (
+            <Button onClick={startNewTest} variant="subtle" size="sm">
+              Start new test
+            </Button>
+          )}
           <Button component={Link} to="/settings" variant="transparent" size="sm">
             Change settings
           </Button>
         </div>
+
+        {session && (
+          <div className={styles.spanInfo}>
+            <Badge variant="light" size="sm" color={session.completedAt ? "green" : "blue"}>
+              {session.completedAt ? "Completed" : "In progress"}
+            </Badge>
+            <Text className={styles.uuid}>{session.uuid}</Text>
+          </div>
+        )}
       </div>
 
       <div className={styles.steps}>

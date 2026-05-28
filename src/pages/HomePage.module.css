@@ -52,6 +52,13 @@
   margin-top: var(--mantine-spacing-xs);
 }
 
+.uuid {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: var(--mantine-font-size-xs);
+  color: var(--mantine-color-dimmed);
+  word-break: break-all;
+}
+
 .actions {
   display: flex;
   flex-direction: column;
