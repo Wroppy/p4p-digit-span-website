@@ -6,6 +6,8 @@ export type DigitSpan = 5 | 9 | 13;
 type SettingsContextValue = {
   digitSpan: DigitSpan;
   setDigitSpan: (span: DigitSpan) => void;
+  trialsPerSpan: number;
+  setTrialsPerSpan: (n: number) => void;
 }
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -15,9 +17,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     key: "digitSpan",
     defaultValue: 9,
   });
+  const [trialsPerSpan, setTrialsPerSpan] = useLocalStorage<number>({
+    key: "trialsPerSpan",
+    defaultValue: 5,
+  });
 
   return (
-    <SettingsContext value={{ digitSpan, setDigitSpan }}>
+    <SettingsContext
+      value={{ digitSpan, setDigitSpan, trialsPerSpan, setTrialsPerSpan }}
+    >
       {children}
     </SettingsContext>
   );
