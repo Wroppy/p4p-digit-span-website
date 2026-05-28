@@ -29,3 +29,31 @@
   align-items: center;
   justify-content: center;
 }
+
+.digitList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--mantine-spacing-xs);
+}
+
+.digitChip {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mantine-radius-sm);
+  background: var(--mantine-color-blue-0);
+  border: 1.5px solid var(--mantine-color-blue-2);
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--mantine-color-blue-8);
+}
+
+.digitChipWrong {
+  background: var(--mantine-color-red-0);
+  border-color: var(--mantine-color-red-2);
+  color: var(--mantine-color-red-8);
+}

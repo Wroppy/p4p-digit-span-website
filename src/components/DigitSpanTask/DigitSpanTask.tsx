@@ -5,7 +5,7 @@ import styles from "./DigitSpanTask.module.css";
 
 export type DigitSpanResult = {
   sequence: number[];
-  response: string;
+  response: number[];
   correct: boolean;
 };
 
@@ -28,7 +28,8 @@ export default function DigitSpanTask({ span, onComplete }: DigitSpanTaskProps) 
   const [sequence, setSequence] = useState<number[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showing, setShowing] = useState(false);
-  const [response, setResponse] = useState("");
+  const [pinValue, setPinValue] = useState("");
+  const [response, setResponse] = useState<number[]>([]);
   const [correct, setCorrect] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -55,22 +56,25 @@ export default function DigitSpanTask({ span, onComplete }: DigitSpanTaskProps) 
     setSequence(seq);
     setCurrentIndex(0);
     setShowing(true);
-    setResponse("");
+    setPinValue("");
+    setResponse([]);
     setCorrect(null);
     setPhase("presenting");
   }
 
-  function handleSubmit() {
-    const expected = sequence.join("");
-    const isCorrect = response === expected;
+  function handleSubmit(pin = pinValue) {
+    const parsed = pin.split("").map(Number);
+    const isCorrect = parsed.every((d, i) => d === sequence[i]) && parsed.length === sequence.length;
+    setResponse(parsed);
     setCorrect(isCorrect);
     setPhase("result");
-    onComplete({ sequence, response, correct: isCorrect });
+    onComplete({ sequence, response: parsed, correct: isCorrect });
   }
 
   function handleReset() {
     setPhase("ready");
-    setResponse("");
+    setPinValue("");
+    setResponse([]);
     setCorrect(null);
   }
 
@@ -113,14 +117,14 @@ export default function DigitSpanTask({ span, onComplete }: DigitSpanTaskProps) 
             type="number"
             size="xl"
             autoFocus
-            value={response}
-            onChange={setResponse}
+            value={pinValue}
+            onChange={setPinValue}
             onComplete={handleSubmit}
           />
           <Button
             size="lg"
-            onClick={handleSubmit}
-            disabled={response.length < span}
+            onClick={() => handleSubmit()}
+            disabled={pinValue.length < span}
           >
             Submit
           </Button>
@@ -142,15 +146,24 @@ export default function DigitSpanTask({ span, onComplete }: DigitSpanTaskProps) 
         <Title order={2}>{correct ? "Correct!" : "Incorrect"}</Title>
         <Stack gap="xs" align="center">
           <Text c="dimmed" size="sm">Correct sequence</Text>
-          <Text fw={600} size="xl" style={{ letterSpacing: "0.2em" }}>
-            {sequence.join(" ")}
-          </Text>
+          <div className={styles.digitList}>
+            {sequence.map((digit, i) => (
+              <div key={i} className={styles.digitChip}>{digit}</div>
+            ))}
+          </div>
           {!correct && (
             <>
               <Text c="dimmed" size="sm" mt="xs">Your response</Text>
-              <Text fw={600} size="xl" style={{ letterSpacing: "0.2em" }}>
-                {response.split("").join(" ")}
-              </Text>
+              <div className={styles.digitList}>
+                {response.map((digit, i) => (
+                  <div
+                    key={i}
+                    className={`${styles.digitChip} ${digit !== sequence[i] ? styles.digitChipWrong : ""}`}
+                  >
+                    {digit}
+                  </div>
+                ))}
+              </div>
             </>
           )}
         </Stack>
