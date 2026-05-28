@@ -1,17 +1,13 @@
-import "@mantine/core/styles.css";
-import { Button, MantineProvider } from "@mantine/core";
-import "./App.css";
+import { Route, Routes } from "react-router";
+import RootLayout from "./layouts/RootLayout";
 
 function App() {
   return (
-    <MantineProvider>
-      {
-        <div>
-          <div>Application</div>
-          <Button>Hello world</Button>
-        </div>
-      }
-    </MantineProvider>
+    <Routes>
+      <Route element={<RootLayout />}>
+        <Route index element={<div>Application</div>} />
+      </Route>
+    </Routes>
   );
 }
 
