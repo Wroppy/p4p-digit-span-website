@@ -1,4 +1,3 @@
-import { randomId } from "@mantine/hooks";
 import type { TlxValues } from "../components/TlxForm/TlxForm";
 import dayjs from "./dayjs";
 
@@ -43,7 +42,7 @@ export function createSession(trialsPerSpan: number): TestSession {
   );
 
   return {
-    uuid: randomId(),
+    uuid: crypto.randomUUID(),
     createdAt: dayjs().toISOString(),
     trialsPerSpan,
     plannedSpans,
