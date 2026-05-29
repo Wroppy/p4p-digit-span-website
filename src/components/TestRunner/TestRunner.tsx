@@ -91,6 +91,7 @@ export default function TestRunner() {
       showFeedback={false}
       onComplete={handleTrialComplete}
       progress={progress}
+      revealSpan={false}
     />
   );
 }

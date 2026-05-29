@@ -21,6 +21,7 @@ type DigitSpanTaskProps = {
   showFeedback: boolean;
   onComplete: (result: DigitSpanResult) => void;
   progress?: ReactNode;
+  revealSpan?: boolean;
 };
 
 type Phase = "ready" | "presenting" | "recall" | "result" | "done";
@@ -32,7 +33,7 @@ function generateSequence(span: number): number[] {
   return Array.from({ length: span }, () => Math.floor(Math.random() * 10));
 }
 
-export default function DigitSpanTask({ span, showFeedback, onComplete, progress }: DigitSpanTaskProps) {
+export default function DigitSpanTask({ span, showFeedback, onComplete, progress, revealSpan = true }: DigitSpanTaskProps) {
   const [phase, setPhase] = useState<Phase>("ready");
   const [sequence, setSequence] = useState<number[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -104,7 +105,7 @@ export default function DigitSpanTask({ span, showFeedback, onComplete, progress
     setCorrect(null);
   }
 
-  if (phase === "ready") return <ReadyPhase span={span} onStart={handleStart} progress={progress} />;
+  if (phase === "ready") return <ReadyPhase span={span} onStart={handleStart} progress={progress} revealSpan={revealSpan} />;
   if (phase === "presenting") return <PresentingPhase digit={sequence[currentIndex]} showing={showing} />;
   if (phase === "recall") {
     return (
