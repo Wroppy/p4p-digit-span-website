@@ -1,8 +1,9 @@
-import { Badge, Button, Divider, Group, Paper, Stack, Table, Text, Title } from "@mantine/core";
-import { IconDownload } from "@tabler/icons-react";
+import { Badge, Button, Collapse, Divider, Group, Paper, Stack, Table, Text, Title, UnstyledButton } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { IconCheck, IconChevronDown, IconDownload, IconX } from "@tabler/icons-react";
 import { Link } from "react-router";
 import { downloadJson } from "../../lib/download";
-import { SPANS, type TestSession } from "../../lib/session";
+import { SPANS, type TestSession, type TrialRecord } from "../../lib/session";
 import type { TlxKey } from "../TlxForm/TlxForm";
 import styles from "./TestResults.module.css";
 
@@ -20,7 +21,55 @@ type TestResultsProps = {
   onRestart: () => void;
 };
 
+function TrialBreakdown({ trial }: { trial: TrialRecord }) {
+  const slots = Math.max(trial.sequence.length, trial.response.length);
+
+  return (
+    <Stack gap={6}>
+      <Group justify="space-between">
+        <Text size="sm" fw={600}>
+          Trial {trial.index + 1} · {trial.span} digits
+        </Text>
+        <Badge
+          variant="light"
+          color={trial.correct ? "green" : "red"}
+          leftSection={trial.correct ? <IconCheck size={12} /> : <IconX size={12} />}
+        >
+          {trial.correct ? "Correct" : "Incorrect"}
+        </Badge>
+      </Group>
+      <Group gap="xs" wrap="nowrap" align="center">
+        <Text size="xs" c="dimmed" w={48}>Shown</Text>
+        <div className={styles.digitRow}>
+          {trial.sequence.map((digit, i) => (
+            <span key={i} className={styles.digit}>{digit}</span>
+          ))}
+        </div>
+      </Group>
+      <Group gap="xs" wrap="nowrap" align="center">
+        <Text size="xs" c="dimmed" w={48}>You</Text>
+        <div className={styles.digitRow}>
+          {Array.from({ length: slots }, (_, i) => {
+            const entered = trial.response[i];
+            if (entered === undefined) {
+              return <span key={i} className={`${styles.digit} ${styles.missing}`}>—</span>;
+            }
+            const ok = entered === trial.sequence[i];
+            return (
+              <span key={i} className={`${styles.digit} ${ok ? styles.correct : styles.wrong}`}>
+                {entered}
+              </span>
+            );
+          })}
+        </div>
+      </Group>
+    </Stack>
+  );
+}
+
 export default function TestResults({ session, onRestart }: TestResultsProps) {
+  const [trialsOpen, { toggle: toggleTrials }] = useDisclosure(false);
+
   const totalCorrect = session.trials.filter((t) => t.correct).length;
   const total = session.trials.length;
 
@@ -69,6 +118,25 @@ export default function TestResults({ session, onRestart }: TestResultsProps) {
             ))}
           </Table.Tbody>
         </Table>
+
+        <Divider />
+        <UnstyledButton onClick={toggleTrials} className={styles.trialsToggle}>
+          <Group justify="space-between">
+            <Text fw={600}>By trial ({total})</Text>
+            <IconChevronDown
+              size={18}
+              className={styles.chevron}
+              data-open={trialsOpen || undefined}
+            />
+          </Group>
+        </UnstyledButton>
+        <Collapse expanded={trialsOpen}>
+          <Stack gap="md" pt="md">
+            {session.trials.map((trial) => (
+              <TrialBreakdown key={trial.index} trial={trial} />
+            ))}
+          </Stack>
+        </Collapse>
 
         {session.tlx && (
           <>

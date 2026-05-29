@@ -22,3 +22,49 @@
 .scoreTotal {
   font-size: var(--mantine-font-size-lg);
 }
+
+.trialsToggle {
+  width: 100%;
+}
+
+.chevron {
+  transition: transform 150ms ease;
+}
+
+.chevron[data-open] {
+  transform: rotate(180deg);
+}
+
+.digitRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.digit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 4px;
+  border-radius: var(--mantine-radius-sm);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: var(--mantine-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  background: var(--mantine-color-default);
+}
+
+.correct {
+  background: var(--mantine-color-green-light);
+  color: var(--mantine-color-green-light-color);
+}
+
+.wrong {
+  background: var(--mantine-color-red-light);
+  color: var(--mantine-color-red-light-color);
+}
+
+.missing {
+  color: var(--mantine-color-dimmed);
+}
